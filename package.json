@@ -1,0 +1,39 @@
+{
+  "name": "@kazion/dpo-sdk",
+  "version": "0.0.1",
+  "main": "dist/lib/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest"
+  },
+  "tsup": {
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "cjs",
+      "esm"
+    ],
+    "outDir": "dist/lib",
+    "splitting": false,
+    "sourcemap": false,
+    "dts": true,
+    "minify": true,
+    "clean": true
+  },
+  "files": [
+    "dist"
+  ],
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.4",
+    "vitest": "^0.30.1"
+  },
+  "dependencies": {
+    "axios": "^1.3.5",
+    "express": "^4.18.2",
+    "fast-xml-parser": "^4.2.1"
+  }
+}
