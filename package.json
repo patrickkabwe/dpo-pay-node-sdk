@@ -1,6 +1,6 @@
 {
   "name": "@kazion/dpo-sdk",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
@@ -9,8 +9,6 @@
     "dev": "ts-node playground/index.ts",
     "prepublishOnly": "tsup",
     "preversion": "tsup"
-
-
   },
   "tsup": {
     "entry": [
