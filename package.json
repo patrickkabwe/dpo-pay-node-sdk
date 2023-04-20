@@ -6,7 +6,6 @@
   "scripts": {
     "build": "tsup",
     "test": "vitest",
-    "dev": "ts-node playground/index.ts",
     "prepublishOnly": "tsup",
     "preversion": "tsup",
     "postversion": "git push && git push --tags"
