@@ -8,9 +8,9 @@
     "test": "vitest",
     "dev": "ts-node playground/index.ts",
     "prepublishOnly": "tsup",
-    "preversion": "tsup",
-    "version": "tsup",
-    "postversion": "git push && git push --tags"
+    "preversion": "tsup"
+
+
   },
   "tsup": {
     "entry": [
