@@ -1,5 +1,13 @@
+import { isAxiosError } from "axios";
 import { axiosInstance } from "./config/axios";
+import { xmlResponseFormatter } from "./helpers/responseFormatter";
 import { jsonToXml } from "./helpers/xmlToJson";
+import type {
+  DPOPayloadObject,
+  DPOPaymentOptions,
+  InitiatePaymentPayloadObject,
+  InitiatePaymentResponse,
+} from "./types";
 
 export class DPOPayment {
   private companyToken: string;
@@ -17,19 +25,30 @@ export class DPOPayment {
       const objectPayload: DPOPayloadObject = {
         API3G: {
           CompanyToken: this.companyToken,
-          Request: "cancelToken",
+          Request: "createToken",
           ...paymentObject,
         },
       };
 
+      console.log({
+        objectPayload,
+      });
       // convert json to xml
       const xmlPayload = jsonToXml(objectPayload);
 
       // make an http request to the DPO API
       const response = await axiosInstance.post(this.apiVersion, xmlPayload);
-      return response.data;
+
+      return xmlResponseFormatter(response.data);
     } catch (error: any) {
-      return error.response.data;
+      console.log({
+        error,
+      });
+
+      if (isAxiosError(error)) {
+        return error.response?.data;
+      }
+      return error;
     }
   }
 

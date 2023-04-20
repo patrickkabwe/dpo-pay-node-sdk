@@ -27,8 +27,5 @@
       "~/*": ["*"]
     }
   },
-  "include": ["src/**/*", "tests/**/*"],
-  "ts-node": {
-    "require": ["tsconfig-paths/register"]
-  }
+  "include": ["src/**/*", "tests/**/*"]
 }

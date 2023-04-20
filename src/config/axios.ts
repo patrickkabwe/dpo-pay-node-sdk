@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosInstance = axios.create({
-  baseURL: process.env.DPO_BASE_API_URL,
+  baseURL: "https://secure.3gdirectpay.com/API",
   headers: {
     "Content-Type": "application/xml",
   },

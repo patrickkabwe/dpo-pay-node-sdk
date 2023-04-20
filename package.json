@@ -1,11 +1,16 @@
 {
   "name": "@kazion/dpo-sdk",
-  "version": "0.0.1",
-  "main": "dist/lib/index.js",
+  "version": "0.0.2",
+  "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
     "build": "tsup",
-    "test": "vitest"
+    "test": "vitest",
+    "dev": "ts-node playground/index.ts",
+    "prepublishOnly": "tsup",
+    "preversion": "tsup",
+    "version": "tsup",
+    "postversion": "git push && git push --tags"
   },
   "tsup": {
     "entry": [
@@ -15,7 +20,7 @@
       "cjs",
       "esm"
     ],
-    "outDir": "dist/lib",
+    "outDir": "lib",
     "splitting": false,
     "sourcemap": false,
     "dts": true,
@@ -23,7 +28,7 @@
     "clean": true
   },
   "files": [
-    "dist"
+    "lib"
   ],
   "devDependencies": {
     "@types/node": "^18.15.11",

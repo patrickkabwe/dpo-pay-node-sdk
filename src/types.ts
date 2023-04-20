@@ -1,11 +1,11 @@
 // import { statusMap } from "./utils/statusMap";
 
-interface DPOPaymentOptions {
+export interface DPOPaymentOptions {
   companyToken: string;
   apiVersion?: string;
 }
 
-interface Transaction {
+export interface Transaction {
   PaymentAmount: number;
   PaymentCurrency: string;
   CompanyRef: string;
@@ -26,9 +26,9 @@ interface Transaction {
   EmailTransaction?: 0 | 1; // 0 = false, 1 = true
 }
 
-interface Service {
+export interface Service {
   Service: {
-    ServiceType: string;
+    ServiceType: string | number;
     ServiceDescription: string;
     ServiceDate: string;
     ServiceFrom?: string;
@@ -36,21 +36,21 @@ interface Service {
   };
 }
 
-interface InitiatePaymentPayloadObject {
+export interface InitiatePaymentPayloadObject {
   Transaction: Transaction;
-  Services: Service;
+  Services: Service[];
 }
 
-type StatusResponse = "success" | "failed" | "pending" | "error";
-type StatusCodeResponse = 200 | 400 | 401 | 403 | 404 | 500;
+export type StatusResponse = "success" | "failed" | "pending" | "error";
+export type StatusCodeResponse = 200 | 400 | 401 | 403 | 404 | 500;
 
-type InitiatePaymentResponse = {
+export type InitiatePaymentResponse = {
   amount: number;
   status: StatusResponse;
   statusCode: StatusCodeResponse;
 };
 
-type DPOPayloadObject = {
+export type DPOPayloadObject = {
   API3G: {
     CompanyToken: string;
     Request: DPORequestType;
@@ -58,7 +58,7 @@ type DPOPayloadObject = {
   };
 };
 
-type DPORequestType =
+export type DPORequestType =
   | "createToken"
   | "refundToken"
   | "updateToken"
