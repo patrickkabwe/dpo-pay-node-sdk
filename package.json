@@ -6,10 +6,8 @@
   "scripts": {
     "build": "tsup",
     "test": "vitest",
-    "prepublishOnly": "tsup",
-    "preversion": "tsup",
-    "postversion": "git push && git push --tags",
-    "bump:version": "npm version patch && npm publish --access public"
+    "prepublishOnly": "npm version patch && tsup",
+    "postversion": "git push && git push --tags"
   },
   "tsup": {
     "entry": [
