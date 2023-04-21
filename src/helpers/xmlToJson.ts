@@ -1,10 +1,9 @@
-import { XMLBuilder } from "fast-xml-parser";
+import { XMLParser } from "fast-xml-parser";
 
-export const jsonToXml = (json: any): any => {
-  const builder = new XMLBuilder();
-  const xmlContent = `<?xml version="1.0" encoding="utf-8"?>${builder.build(
-    json
-  )}`;
+export const xmlToJson = (xml: any): any => {
+  const parser = new XMLParser();
 
-  return xmlContent;
+  const jsonContent = parser.parse(xml);
+
+  return jsonContent;
 };

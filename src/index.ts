@@ -1,8 +1,8 @@
-import { isAxiosError } from "axios";
 import { axiosInstance } from "./config/axios";
 import { DPOError } from "./helpers/error";
+import { errorFormatter } from "./helpers/errorFormatter";
+import { jsonToXml } from "./helpers/jsonToXml";
 import { xmlResponseFormatter } from "./helpers/responseFormatter";
-import { jsonToXml } from "./helpers/xmlToJson";
 import type {
   CancelPaymentObject,
   ChargeCreditCardPaymentObject,
@@ -11,7 +11,6 @@ import type {
   DPOPayloadObject,
   DPOPaymentOptions,
   InitiatePaymentPayloadObject,
-  InitiatePaymentResponse,
   RefundPaymentObject,
 } from "./types";
 
@@ -26,15 +25,10 @@ export class DPOPayment {
 
   /**
    @param {DPOPayloadObject} objectPayload
-   @returns {Promise<any>}
    @throws {DPOError}
    @description This method processes a payment request to the DPO API
   */
-
-  async processPaymentResponse(
-    objectPayload: DPOPayloadObject,
-    successStatus: string
-  ) {
+  async processPaymentResponse(objectPayload: DPOPayloadObject) {
     const xmlPayload = jsonToXml(objectPayload);
     const response = await axiosInstance.post(this.apiVersion, xmlPayload);
 
@@ -42,26 +36,18 @@ export class DPOPayment {
 
     const fRes = xmlResponseFormatter(response.data);
 
-    console.log(fRes.API3G.StatusCode, Number.parseInt(successStatus));
-
-    if (
-      fRes.API3G.StatusCode !== Number.parseInt(successStatus) ||
-      fRes.API3G.Result !== Number.parseInt(successStatus)
-    ) {
+    if (fRes.statusCode !== 200) {
       throw new DPOError(JSON.stringify(fRes.API3G));
     }
-    return fRes.API3G;
+    return fRes;
   }
 
   /**
    @param {InitiatePaymentPayloadObject} paymentObject
-   @returns {Promise<InitiatePaymentResponse>}
    @throws {DPOError}
    @description This method initiates a payment request to the DPO API
   */
-  async initiatePayment(
-    initiatePaymentObject: InitiatePaymentPayloadObject
-  ): Promise<InitiatePaymentResponse> {
+  async initiatePayment(initiatePaymentObject: InitiatePaymentPayloadObject) {
     try {
       const objectPayload: DPOPayloadObject = {
         API3G: {
@@ -71,14 +57,9 @@ export class DPOPayment {
         },
       };
 
-      return this.processPaymentResponse(objectPayload, "0");
+      return this.processPaymentResponse(objectPayload);
     } catch (error: any) {
-      if (isAxiosError(error)) {
-        delete error.response?.data["?xml"];
-        const er = xmlResponseFormatter(error.response?.data);
-        throw new DPOError(er, error.response?.status);
-      }
-      throw error;
+      return errorFormatter(error);
     }
   }
 
@@ -100,15 +81,14 @@ export class DPOPayment {
         },
       };
 
-      return this.processPaymentResponse(objectPayload, "130");
+      return this.processPaymentResponse(objectPayload);
     } catch (error: any) {
-      return error.response.data;
+      return errorFormatter(error);
     }
   }
 
   /**
    @param {ChargeCreditCardPaymentObject} chargeCreditCardPaymentObject
-   @returns {Promise<any>}
    @throws {DPOError}
    @description This method charges a credit card payment request to the DPO API
   */
@@ -124,15 +104,14 @@ export class DPOPayment {
         },
       };
 
-      return this.processPaymentResponse(objectPayload, "000");
+      return this.processPaymentResponse(objectPayload);
     } catch (error: any) {
-      return error.response.data;
+      return errorFormatter(error);
     }
   }
 
   /**
    @param {RefundPaymentObject} refundPaymentObject
-   @returns {Promise<any>}
    @throws {DPOError}
    @description This method refunds a payment request to the DPO API
   */
@@ -146,15 +125,14 @@ export class DPOPayment {
         },
       };
 
-      return this.processPaymentResponse(objectPayload, "0");
+      return this.processPaymentResponse(objectPayload);
     } catch (error: any) {
-      return error.response.data;
+      return errorFormatter(error);
     }
   }
 
   /**
    @param {CancelPaymentObject} cancelPaymentObject
-   @returns {Promise<any>}
    @throws {DPOError}
    @description This method cancels a payment request to the DPO API
   */
@@ -168,15 +146,14 @@ export class DPOPayment {
         },
       };
 
-      return this.processPaymentResponse(objectPayload, "0");
+      return this.processPaymentResponse(objectPayload);
     } catch (error: any) {
-      return error.response.data;
+      return errorFormatter(error);
     }
   }
 
   /**
    @param {CheckPaymentStatusObject} checkPaymentStatusObject
-   @returns {Promise<any>}
    @throws {DPOError}
    @description This method checks the status of a payment request to the DPO API
   */
@@ -192,9 +169,9 @@ export class DPOPayment {
         },
       };
 
-      return this.processPaymentResponse(objectPayload, "0");
+      return this.processPaymentResponse(objectPayload);
     } catch (error: any) {
-      return error.response.data;
+      return errorFormatter(error);
     }
   }
 }
