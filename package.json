@@ -9,7 +9,7 @@
     "prepublishOnly": "tsup",
     "preversion": "tsup",
     "postversion": "git push && git push --tags",
-    "bump:version": "npm version patch && npm publish"
+    "bump:version": "npm version patch && npm publish --access public"
   },
   "tsup": {
     "entry": [
