@@ -1,5 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { DPOPayment } from "../src/index";
+
+vi.mock("./src/config/axios", async () => {
+  const axios = (await vi.importActual("axios")) as any;
+
+  return { ...axios, post: vi.fn() };
+});
 
 describe("DPO Payment", () => {
   const dpoPayment = new DPOPayment({
@@ -11,14 +17,29 @@ describe("DPO Payment", () => {
   });
 
   it("should be make a payment", async () => {
-    const amount = 100;
     const paymentExpected = {
-      amount,
       status: "success",
       statusCode: 200,
     };
-    const payment = await dpoPayment.makePayment(amount);
+    const response = await dpoPayment.initiatePayment({
+      Services: [
+        {
+          Service: {
+            ServiceType: 5525,
+            ServiceDescription: "ServiceDescription",
+            ServiceDate: "2021-01-01",
+          },
+        },
+      ],
+      Transaction: {
+        PaymentAmount: 100,
+        PaymentCurrency: "ZMW",
+        CompanyRef: "CompanyRef",
+        RedirectURL: "https://example.com",
+        BackURL: "https://example.com",
+      },
+    });
 
-    expect(payment).toEqual(paymentExpected);
+    expect(response).toEqual(paymentExpected);
   });
 });
