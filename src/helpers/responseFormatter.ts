@@ -14,7 +14,7 @@ export const xmlResponseFormatter = (xml: any): DPOResponse => {
       return { ...acc, ...curr };
     });
   delete keyValueObject["result"];
-  delete keyValueObject["resultexplanation"];
+  delete keyValueObject["resultExplanation"];
   switch (status) {
     case 0:
     case 130:
