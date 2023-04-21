@@ -8,7 +8,8 @@
     "test": "vitest",
     "prepublishOnly": "tsup",
     "preversion": "tsup",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "bump:version": "npm version patch && npm publish"
   },
   "tsup": {
     "entry": [
