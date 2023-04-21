@@ -1,6 +1,6 @@
 {
   "name": "@kazion/dpo-node-sdk",
-  "version": "0.0.10",
+  "version": "0.0.1",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
