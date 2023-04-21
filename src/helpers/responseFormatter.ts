@@ -1,4 +1,5 @@
 import { DPOResponse } from "~/types";
+import { camelize } from "./camelize";
 import { xmlToJson } from "./xmlToJson";
 
 export const xmlResponseFormatter = (xml: any): DPOResponse => {
@@ -7,7 +8,7 @@ export const xmlResponseFormatter = (xml: any): DPOResponse => {
   const message = formattedXml.API3G?.ResultExplanation || "success";
   const keyValueObject = Object.entries(formattedXml.API3G)
     .map(([key, value]) => {
-      return { [key.toLowerCase()]: value };
+      return { [camelize(key)]: value };
     })
     .reduce((acc, curr) => {
       return { ...acc, ...curr };
