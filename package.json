@@ -1,5 +1,5 @@
 {
-  "name": "@kazion/dpo-sdk",
+  "name": "@kazion/dpo-node-sdk",
   "version": "0.0.10",
   "main": "lib/index.js",
   "license": "MIT",
