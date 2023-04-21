@@ -7,7 +7,7 @@ export const xmlResponseFormatter = (xml: any): DPOResponse => {
   const message = formattedXml.API3G?.ResultExplanation || "success";
   const keyValueObject = Object.entries(formattedXml.API3G)
     .map(([key, value]) => {
-      return { [key]: value };
+      return { [key.toLowerCase()]: value };
     })
     .reduce((acc, curr) => {
       return { ...acc, ...curr };
