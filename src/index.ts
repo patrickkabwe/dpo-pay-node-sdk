@@ -24,9 +24,7 @@ export class DPOPayment {
   }
 
   /**
-   @param {DPOPayloadObject} objectPayload
-   @throws {DPOError}
-   @description This method processes a payment request to the DPO API
+  This method processes a payment request to the DPO API
   */
   async processPaymentResponse(objectPayload: DPOPayloadObject) {
     const xmlPayload = jsonToXml(objectPayload);
@@ -37,7 +35,7 @@ export class DPOPayment {
     const fRes = xmlResponseFormatter(response.data);
 
     if (fRes.statusCode !== 200) {
-      throw new DPOError(JSON.stringify(fRes.API3G));
+      throw new DPOError(JSON.stringify(fRes));
     }
     return fRes;
   }
