@@ -172,4 +172,8 @@ export class DPOPayment {
       return errorFormatter(error);
     }
   }
+
+  static parseWebhookXML(xml: string) {
+    return xmlResponseFormatter(xml, false);
+  }
 }

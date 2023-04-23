@@ -2,7 +2,10 @@ import { DPOResponse } from "~/types";
 import { camelize } from "./camelize";
 import { xmlToJson } from "./xmlToJson";
 
-export const xmlResponseFormatter = (xml: any): DPOResponse => {
+export const xmlResponseFormatter = (
+  xml: any,
+  delFields = true
+): DPOResponse => {
   const formattedXml = xmlToJson(xml);
   const status = formattedXml.API3G?.StatusCode || formattedXml.API3G?.Result;
   const message = formattedXml.API3G?.ResultExplanation || "success";
@@ -13,8 +16,10 @@ export const xmlResponseFormatter = (xml: any): DPOResponse => {
     .reduce((acc, curr) => {
       return { ...acc, ...curr };
     });
-  delete keyValueObject["result"];
-  delete keyValueObject["resultExplanation"];
+  if (delFields) {
+    delete keyValueObject["result"];
+    delete keyValueObject["resultExplanation"];
+  }
   switch (status) {
     case 0:
     case 130:
