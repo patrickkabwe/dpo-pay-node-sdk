@@ -1,6 +1,6 @@
 {
-  "name": "@kazion/dpo-node-sdk",
-  "version": "0.0.9",
+  "name": "@kazion/dpopay-sdk",
+  "version": "1.1.0",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {

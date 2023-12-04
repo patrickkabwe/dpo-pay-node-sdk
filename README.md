@@ -2,14 +2,14 @@
 
 ### Introduction
 
-The `@kazion/dpo-node-sdk` is a npm package for node js which provides a convenient interface for interacting with the DPO API to process various payment operations. The package is designed to simplify the integration of DPO payment functionalities into your application.
+The `@kazion/dpopay-sdk` is a npm package for node js which provides a convenient interface for interacting with the DPO API to process various payment operations. The package is designed to simplify the integration of DPO payment functionalities into your application.
 
 ### Installation
 
-To install `@kazion/dpo-node-sdk`, use the following command:
+To install `@kazion/dpopay-sdk`, use the following command:
 
 ```bash
-yarn add @kazion/dpo-node-sdk #works with other package managers too
+yarn add @kazion/dpopay-sdk #works with other package managers too
 ```
 
 ### Usage
@@ -17,7 +17,7 @@ yarn add @kazion/dpo-node-sdk #works with other package managers too
 To use the package, import it into your project as follows:
 
 ```javascript
-import { DPOPayment } from "@kazion/dpo-node-sdk";
+import { DPOPayment } from "@kazion/dpopay-sdk";
 ```
 
 ### Configuration
@@ -48,7 +48,7 @@ The package provides the following payment operations:
 #### Initiate Payment
 
 ```javascript
-import { DPOPayment } from "@kazion/dpo-node-sdk";
+import { DPOPayment } from "@kazion/dpopay-sdk";
 
 const dpoPayment = new DPOPayment({
   companyToken: "your_company_token",
