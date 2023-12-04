@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { DPOPayment } from "../src/index";
+import { DPOPayment } from "../src/dpo";
 
 vi.mock("./src/config/axios", async () => {
   const axios = (await vi.importActual("axios")) as any;
