@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsup",
     "test": "vitest",
-    "prepublishOnly": "npm version patch && tsup",
-    "postversion": "git push && git push --tags"
+    "push": "npm version minor && git push && git push --tags",
+    "git:push": "git add -A && git commit -m 'new release' && git push"
   },
   "tsup": {
     "entry": [
