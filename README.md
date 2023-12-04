@@ -1,4 +1,4 @@
-## DPO Node SDK
+## DPOPay Node SDK
 
 ### Introduction
 
