@@ -49,10 +49,7 @@
     "dpo-sdk-node",
     "dpo-sdk-nodejs"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Kazion500/dpo-pay-sdk.git"
-  },
+  "repository": "https://github.com/Kazion500/dpo-pay-sdk.git",
   "release": {
     "branches": [
       "main",
