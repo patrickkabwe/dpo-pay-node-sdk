@@ -6,8 +6,6 @@
   "scripts": {
     "build": "tsup",
     "test": "vitest",
-    "push": "npm version minor && git push && git push --tags",
-    "git:push": "git add -A && git commit -m 'new release' && git push",
     "audit:fix": "yarn-audit-fix --force"
   },
   "tsup": {
