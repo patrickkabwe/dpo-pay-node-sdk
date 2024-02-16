@@ -43,6 +43,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: yarn
       - run: yarn install
+      - run: yarn audit:fix
       - run: yarn audit signatures
       - run: yarn test
 
@@ -61,6 +62,7 @@ jobs:
           node-version-file: .nvmrc
           cache: yarn
       - run: yarn install
+      - run: yarn audit:fix
       - run: yarn audit signatures
       - run: yarn test
 

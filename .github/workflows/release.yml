@@ -24,6 +24,7 @@ jobs:
           cache: yarn
           node-version: lts/*
       - run: yarn install
+      - run: yarn audit:fix
       - run: yarn audit signatures
         # with:
         #   node-version: '16.x'
