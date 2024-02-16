@@ -1,8 +1,8 @@
 import { isAxiosError } from "axios";
 import { DPOError } from "./error";
-import { xmlResponseFormatter } from "./responseFormatter";
+import { xmlResponseFormatter } from "./xmlResponseFormatter";
 
-export const errorFormatter = (error: any): any => {
+export const errorHandler = (error: any): any => {
   if (isAxiosError(error)) {
     delete error.response?.data["?xml"];
     const er = xmlResponseFormatter(error.response?.data);
