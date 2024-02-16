@@ -1,4 +1,4 @@
-name: Publish Package to npmjs
+name: Release
 on:
   push: 
     branches:
@@ -15,7 +15,7 @@ jobs:
       issues: write # to be able to comment on released issues
       pull-requests: write # to be able to comment on released pull requests
       id-token: write # to enable use of OIDC for npm provenance
-    name: Publish
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
