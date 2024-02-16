@@ -26,6 +26,7 @@ jobs:
       - run: yarn install
       - run: yarn audit:fix
       - run: yarn audit signatures
+      - run: yarn build
         # with:
         #   node-version: '16.x'
         #   registry-url: 'https://registry.npmjs.org'
