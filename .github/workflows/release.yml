@@ -1,11 +1,12 @@
 name: Release
 on:
-  push: 
+  release:
+    types: [prereleased, released]
+
+  pull_request:
     branches:
       - main
-      - next
-      - beta
-      - "*.x"
+
 permissions:
   contents: read # for checkout
 jobs:
@@ -27,9 +28,6 @@ jobs:
       - run: yarn audit:fix
       - run: yarn audit signatures
       - run: yarn build
-        # with:
-        #   node-version: '16.x'
-        #   registry-url: 'https://registry.npmjs.org'
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

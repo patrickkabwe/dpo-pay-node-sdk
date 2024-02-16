@@ -1,16 +1,11 @@
 name: Test
 
 on:
-  push:
-    branches:
-      - main
-      - next
-      - renovate/**
+  release:
+    types: [prereleased, released]
 
   pull_request:
-    types:
-      - opened
-      - synchronize
+    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
