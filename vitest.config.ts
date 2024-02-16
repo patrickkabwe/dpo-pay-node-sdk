@@ -9,7 +9,9 @@ export default defineConfig({
   test: {
     clearMocks: true,
     globals: true,
-    // setupFiles: ['dotenv/config'],
+    env: {
+      DPO_BASE_URL: "https://secure.3gdirectpay.com/API",
+    },
   },
   resolve: {
     alias: [{ find: "~", replacement: resolve(__dirname, "src") }],
