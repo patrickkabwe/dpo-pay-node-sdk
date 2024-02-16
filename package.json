@@ -1,6 +1,6 @@
 {
   "name": "@kazion/dpopay-sdk",
-  "version": "2.0.0-beta.1",
+  "version": "1.1.0",
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
@@ -29,6 +29,7 @@
     "lib"
   ],
   "devDependencies": {
+    "@semantic-release/git": "^10.0.1",
     "@types/node": "^18.15.11",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4",
@@ -55,7 +56,27 @@
   "release": {
     "branches": [
       "main",
-      "next"
+      "next",
+      {
+        "name": "beta",
+        "prerelease": true
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json",
+            "lib/*"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ],
+      "@semantic-release/github",
+      "@semantic-release/npm"
     ]
   }
 }
