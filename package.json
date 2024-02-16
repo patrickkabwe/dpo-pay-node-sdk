@@ -9,7 +9,7 @@
     "push": "npm version minor && git push && git push --tags",
     "git:push": "git add -A && git commit -m 'new release' && git push",
     "audit:fix": "yarn-audit-fix --force",
-    "postinstall": "yarn audit:fix"
+    "preinstall": "yarn-audit-fix --force"
   },
   "tsup": {
     "entry": [

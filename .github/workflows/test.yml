@@ -41,10 +41,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: npm
-      - run: npm clean-install
-      - run: npm audit signatures
-      - run: npm test
+          cache: yarn
+      - run: yarn install
+      - run: yarn audit signatures
+      - run: yarn test
 
   # verify against the node version defined for development in the .nvmrc
   test_dev:
