@@ -26,6 +26,7 @@ The package requires a configuration object to be passed to it. The configuratio
 
 - `companyToken`: This is the company token provided by DPO.
 - `apiVersion`: This is the version of the DPO API to use. The default value is `v6`.
+- `DPO_BASE_URL`: This should be defined in your `.env` file. The default value is `https://secure.3gdirectpay.com/API`.
 
 ### Payment Operations
 
@@ -52,7 +53,7 @@ import { DPOPayment } from "@kazion/dpopay-sdk";
 
 const dpoPayment = new DPOPayment({
   companyToken: "your_company_token",
-  apiVersion: "/v6/", // optional, default is "/v6/"
+  apiVersion: "v6", // optional, default is "v6"
 });
 
 const initiatePaymentPayload: InitiatePaymentPayloadObject = {
@@ -88,7 +89,7 @@ const initiatePaymentPayload: InitiatePaymentPayloadObject = {
 // Initialize DPOPayment object with your company token
 const dpoPayment = new DPOPayment({
   companyToken: "your_company_token",
-  apiVersion: "/v6/", // optional, default is "/v6/"
+  apiVersion: "v6", // optional, default is "v6"
 });
 
 // Initiating the payment request
@@ -121,7 +122,7 @@ const chargeMobilePaymentPayload: ChargeMobilePaymentObject = {
 // Initialize DPOPayment object with your company token
 const dpoPayment = new DPOPayment({
   companyToken: "your_company_token",
-  apiVersion: "/v6/", // optional, default is "/v6/"
+  apiVersion: "v6", // optional, default is "v6"
 });
 
 // Charging the mobile payment
@@ -150,7 +151,7 @@ Contributions are welcome. Please fork the repository and submit a pull request.
 
 ### Support
 
-For support, please contact us at patrickckabwe@gmail.com
+For support, please contact me at patrickckabwe@gmail.com
 
 ### Acknowledgements
 
