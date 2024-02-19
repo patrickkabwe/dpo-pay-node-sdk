@@ -2,30 +2,35 @@ import { axiosInstance } from "./config/axios";
 import { DPOError } from "./helpers/error";
 import { errorHandler } from "./helpers/errorHandler";
 import { jsonToXml } from "./helpers/jsonToXml";
-import { xmlResponseFormatter } from "./helpers/xmlResponseFormatter";
+import {
+  webhookResponse,
+  xmlResponseFormatter,
+} from "./helpers/xmlResponseFormatter";
 import type {
   APIVersion,
   CancelPaymentObject,
   ChargeCreditCardPaymentObject,
   ChargeMobilePaymentObject,
   CheckPaymentStatusObject,
+  DPOCheckPaymentStatusResponse,
+  DPOInitiatePaymentResponse,
   DPOPayloadObject,
   DPOPaymentOptions,
   DPOResponse,
   InitiatePaymentPayloadObject,
-  PaymentStatus,
   RefundPaymentObject,
+  WebhookResponse,
 } from "./types";
 
 export class DPOPayment {
   private companyToken: string;
   private apiVersion: APIVersion;
-  private baseURL: string;
+  private paymentURL: string;
 
   constructor({ companyToken, apiVersion = "v6" }: DPOPaymentOptions) {
     this.companyToken = companyToken;
     this.apiVersion = apiVersion;
-    this.baseURL =
+    this.paymentURL =
       process.env.DPO_PAYMENT_URL || "https://secure.3gdirectpay.com/payv3.php";
   }
 
@@ -54,11 +59,11 @@ export class DPOPayment {
    @description This method initiates a payment request to the DPO API
    @param {InitiatePaymentPayloadObject} paymentObject
    @throws {DPOError}
-   @returns {Promise<DPOResponse>}
+   @returns {Promise<DPOInitiatePaymentResponse>}
   */
   async initiatePayment(
     initiatePaymentObject: InitiatePaymentPayloadObject
-  ): Promise<DPOResponse> {
+  ): Promise<DPOInitiatePaymentResponse> {
     try {
       const objectPayload: DPOPayloadObject = {
         API3G: {
@@ -68,11 +73,13 @@ export class DPOPayment {
         },
       };
 
-      const response = await this.processPaymentResponse(objectPayload);
+      const response = (await this.processPaymentResponse(
+        objectPayload
+      )) as DPOInitiatePaymentResponse;
 
       return {
         ...response,
-        paymentURL: `${this.baseURL}?ID=${response.transToken}`,
+        paymentURL: `${this.paymentURL}?ID=${response.transToken}`,
       };
     } catch (error: any) {
       return errorHandler(error);
@@ -176,11 +183,11 @@ export class DPOPayment {
    @description This method checks the status of a payment request to the DPO API
    @param {CheckPaymentStatusObject} checkPaymentStatusObject
    @throws {DPOError}
-   @returns {Promise<PaymentStatus>}
+   @returns {Promise<DPOCheckPaymentStatusResponse>}
   */
   checkPaymentStatus(
     checkPaymentStatusObject: CheckPaymentStatusObject
-  ): Promise<PaymentStatus> {
+  ): Promise<DPOCheckPaymentStatusResponse> {
     try {
       const objectPayload: DPOPayloadObject = {
         API3G: {
@@ -192,13 +199,13 @@ export class DPOPayment {
 
       return this.processPaymentResponse(
         objectPayload
-      ) as Promise<PaymentStatus>;
+      ) as Promise<DPOCheckPaymentStatusResponse>;
     } catch (error: any) {
       return errorHandler(error);
     }
   }
 
-  parseWebhookXML(xml: string) {
-    return xmlResponseFormatter(xml, false);
+  parseWebhookXML(xml: string): WebhookResponse {
+    return webhookResponse(xml);
   }
 }
