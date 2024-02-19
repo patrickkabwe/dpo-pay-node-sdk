@@ -4,10 +4,11 @@ export interface DPOPaymentOptions {
 }
 
 export type Country = "zambia" | "kenya" | "uganda" | "tanzania";
+export type Currency = "USD" | "ZMW" | "KES" | "UGX" | "TZS";
 
 export interface Transaction {
   PaymentAmount: number;
-  PaymentCurrency: string;
+  PaymentCurrency: Currency;
   CompanyRef: string;
   RedirectURL: string;
   BackURL: string;
@@ -101,7 +102,15 @@ export type DPOResponse = {
   [key: string]: any;
 };
 
-export interface PaymentStatus {
+export interface DPOInitiatePaymentResponse extends DPOResponse {
+  transToken: string;
+  transRef: string;
+  statusCode: StatusCodeResponse;
+  message: string;
+  paymentURL: string;
+}
+
+export interface DPOCheckPaymentStatusResponse extends DPOResponse {
   customerName: string;
   customerCredit: string;
   customerCreditType: string;
@@ -125,6 +134,17 @@ export interface PaymentStatus {
   transactionFinalAmount: number;
   statusCode: StatusCodeResponse;
   message: string;
+}
+
+export interface WebhookResponse {
+  /**
+   *  @description This is the response from the webhook in JSON format
+   */
+  dpoJsonResponse: any;
+  /**
+   *  @description This is the response from the webhook in XML format
+   */
+  dpoXMLResponse: string;
 }
 
 export type DPOPayloadObject = {
