@@ -10,7 +10,7 @@ export default defineConfig({
     clearMocks: true,
     globals: true,
     env: {
-      DPO_BASE_URL: "https://secure.3gdirectpay.com/API",
+      DPO_PAYMENT_URL: "https://secure.3gdirectpay.com/payv3.php",
     },
   },
   resolve: {

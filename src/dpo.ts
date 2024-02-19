@@ -26,7 +26,7 @@ export class DPOPayment {
     this.companyToken = companyToken;
     this.apiVersion = apiVersion;
     this.baseURL =
-      process.env.DPO_BASE_URL || "https://secure.3gdirectpay.com/API";
+      process.env.DPO_PAYMENT_URL || "https://secure.3gdirectpay.com/payv3.php";
   }
 
   /**

@@ -26,7 +26,7 @@ The package requires a configuration object to be passed to it. The configuratio
 
 - `companyToken`: This is the company token provided by DPO.
 - `apiVersion`: This is the version of the DPO API to use. The default value is `v6`.
-- `DPO_BASE_URL`: This should be defined in your `.env` file. The default value is `https://secure.3gdirectpay.com/API`.
+- `DPO_PAYMENT_URL`: This should be defined in your `.env` file. The default value is `https://secure.3gdirectpay.com/payv3.php`.
 
 ### Payment Operations
 
