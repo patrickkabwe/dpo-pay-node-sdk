@@ -136,11 +136,13 @@ export interface DPOCheckPaymentStatusResponse extends DPOResponse {
   message: string;
 }
 
+export interface WebhookJSONResponse extends DPOCheckPaymentStatusResponse {}
+
 export interface WebhookResponse {
   /**
    *  @description This is the response from the webhook in JSON format
    */
-  dpoJsonResponse: any;
+  dpoJsonResponse: WebhookJSONResponse;
   /**
    *  @description This is the response from the webhook in XML format
    */
