@@ -3,9 +3,10 @@ interface DPOPaymentOptions {
     apiVersion?: APIVersion;
 }
 type Country = "zambia" | "kenya" | "uganda" | "tanzania";
+type Currency = "USD" | "ZMW" | "KES" | "UGX" | "TZS";
 interface Transaction {
     PaymentAmount: number;
-    PaymentCurrency: string;
+    PaymentCurrency: Currency;
     CompanyRef: string;
     RedirectURL: string;
     BackURL: string;
@@ -74,7 +75,14 @@ type DPOResponse = {
     message: string;
     [key: string]: any;
 };
-interface PaymentStatus {
+interface DPOInitiatePaymentResponse extends DPOResponse {
+    transToken: string;
+    transRef: string;
+    statusCode: StatusCodeResponse;
+    message: string;
+    paymentURL: string;
+}
+interface DPOCheckPaymentStatusResponse extends DPOResponse {
     customerName: string;
     customerCredit: string;
     customerCreditType: string;
@@ -99,6 +107,12 @@ interface PaymentStatus {
     statusCode: StatusCodeResponse;
     message: string;
 }
+interface WebhookJSONResponse extends DPOCheckPaymentStatusResponse {
+}
+interface WebhookResponse {
+    dpoJsonResponse: WebhookJSONResponse;
+    dpoXMLResponse: string;
+}
 type DPOPayloadObject = {
     API3G: {
         CompanyToken: string;
@@ -111,16 +125,16 @@ type DPORequestType = "createToken" | "refundToken" | "updateToken" | "verifyTok
 declare class DPOPayment {
     private companyToken;
     private apiVersion;
-    private baseURL;
+    private paymentURL;
     constructor({ companyToken, apiVersion }: DPOPaymentOptions);
     processPaymentResponse(objectPayload: DPOPayloadObject): Promise<DPOResponse>;
-    initiatePayment(initiatePaymentObject: InitiatePaymentPayloadObject): Promise<DPOResponse>;
+    initiatePayment(initiatePaymentObject: InitiatePaymentPayloadObject): Promise<DPOInitiatePaymentResponse>;
     chargeMobilePayment(chargeMobilePaymentObject: ChargeMobilePaymentObject): Promise<DPOResponse>;
     chargeCardPayment(chargeCreditCardPaymentObject: ChargeCreditCardPaymentObject): Promise<DPOResponse>;
     refundPayment(refundPaymentObject: RefundPaymentObject): Promise<DPOResponse>;
     cancelPayment(cancelPaymentObject: CancelPaymentObject): Promise<DPOResponse>;
-    checkPaymentStatus(checkPaymentStatusObject: CheckPaymentStatusObject): Promise<PaymentStatus>;
-    parseWebhookXML(xml: string): DPOResponse;
+    checkPaymentStatus(checkPaymentStatusObject: CheckPaymentStatusObject): Promise<DPOCheckPaymentStatusResponse>;
+    parseWebhookXML(xml: string): WebhookResponse;
 }
 
 export { DPOPayment };

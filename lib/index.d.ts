@@ -107,6 +107,12 @@ interface DPOCheckPaymentStatusResponse extends DPOResponse {
     statusCode: StatusCodeResponse;
     message: string;
 }
+interface WebhookJSONResponse extends DPOCheckPaymentStatusResponse {
+}
+interface WebhookResponse {
+    dpoJsonResponse: WebhookJSONResponse;
+    dpoXMLResponse: string;
+}
 type DPOPayloadObject = {
     API3G: {
         CompanyToken: string;
@@ -128,10 +134,7 @@ declare class DPOPayment {
     refundPayment(refundPaymentObject: RefundPaymentObject): Promise<DPOResponse>;
     cancelPayment(cancelPaymentObject: CancelPaymentObject): Promise<DPOResponse>;
     checkPaymentStatus(checkPaymentStatusObject: CheckPaymentStatusObject): Promise<DPOCheckPaymentStatusResponse>;
-    parseWebhookXML(xml: string): {
-        dpoJsonResponse: DPOResponse;
-        dpoAck: string;
-    };
+    parseWebhookXML(xml: string): WebhookResponse;
 }
 
 export { DPOPayment };
