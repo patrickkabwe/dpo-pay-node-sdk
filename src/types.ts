@@ -144,7 +144,7 @@ export interface WebhookResponse {
    */
   dpoJsonResponse: WebhookJSONResponse;
   /**
-   *  @description This is the response from the webhook in XML format
+   *  @description This is the response that is needed to be sent to the webhook
    */
   dpoXMLResponse: string;
 }
