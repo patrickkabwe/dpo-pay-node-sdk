@@ -3,7 +3,7 @@ export interface DPOPaymentOptions {
   apiVersion?: APIVersion;
 }
 
-export type Country = "zambia" | "kenya" | "uganda" | "tanzania";
+export type Country = "ZM" | "KE" | "UG" | "TZ";
 export type Currency = "USD" | "ZMW" | "KES" | "UGX" | "TZS";
 
 export interface Transaction {

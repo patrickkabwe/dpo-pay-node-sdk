@@ -2,7 +2,7 @@ interface DPOPaymentOptions {
     companyToken: string;
     apiVersion?: APIVersion;
 }
-type Country = "zambia" | "kenya" | "uganda" | "tanzania";
+type Country = "ZM" | "KE" | "UG" | "TZ";
 type Currency = "USD" | "ZMW" | "KES" | "UGX" | "TZS";
 interface Transaction {
     PaymentAmount: number;
@@ -69,7 +69,18 @@ interface RefundPaymentObject {
     refundDetails: string;
 }
 type APIVersion = "v6";
+type StatusResponse = "success" | "failed" | "pending" | "error";
 type StatusCodeResponse = 200 | 400 | 401 | 403 | 404 | 500;
+type SuccessResponse = {
+    status: StatusResponse;
+    statusCode: StatusCodeResponse;
+};
+type ErrorResponse = {
+    status: StatusResponse;
+    statusCode: StatusCodeResponse;
+    message: string;
+    [key: string]: any;
+};
 type DPOResponse = {
     statusCode: StatusCodeResponse;
     message: string;
@@ -137,4 +148,4 @@ declare class DPOPayment {
     parseWebhookXML(xml: string): WebhookResponse;
 }
 
-export { DPOPayment };
+export { type APIVersion, type Additional, type CancelPaymentObject, type ChargeCreditCardPaymentObject, type ChargeMobilePaymentObject, type CheckPaymentStatusObject, type Country, type Currency, type DPOCheckPaymentStatusResponse, type DPOInitiatePaymentResponse, type DPOPayloadObject, DPOPayment, type DPOPaymentOptions, type DPORequestType, type DPOResponse, type ErrorResponse, type InitiatePaymentPayloadObject, type RefundPaymentObject, type Service, type StatusCodeResponse, type StatusResponse, type SuccessResponse, type Transaction, type WebhookJSONResponse, type WebhookResponse };

@@ -42,7 +42,7 @@ export class DPOPayment {
 
     const response = await axiosInstance.post(
       `/${this.apiVersion}/`,
-      xmlPayload
+      xmlPayload,
     );
 
     delete response.data["?xml"];
@@ -62,7 +62,7 @@ export class DPOPayment {
    @returns {Promise<DPOInitiatePaymentResponse>}
   */
   async initiatePayment(
-    initiatePaymentObject: InitiatePaymentPayloadObject
+    initiatePaymentObject: InitiatePaymentPayloadObject,
   ): Promise<DPOInitiatePaymentResponse> {
     try {
       const objectPayload: DPOPayloadObject = {
@@ -74,7 +74,7 @@ export class DPOPayment {
       };
 
       const response = (await this.processPaymentResponse(
-        objectPayload
+        objectPayload,
       )) as DPOInitiatePaymentResponse;
 
       return {
@@ -93,7 +93,7 @@ export class DPOPayment {
    @throws {DPOError}
   */
   chargeMobilePayment(
-    chargeMobilePaymentObject: ChargeMobilePaymentObject
+    chargeMobilePaymentObject: ChargeMobilePaymentObject,
   ): Promise<DPOResponse> {
     try {
       const objectPayload: DPOPayloadObject = {
@@ -116,7 +116,7 @@ export class DPOPayment {
    @throws {DPOError}
   */
   chargeCardPayment(
-    chargeCreditCardPaymentObject: ChargeCreditCardPaymentObject
+    chargeCreditCardPaymentObject: ChargeCreditCardPaymentObject,
   ): Promise<DPOResponse> {
     try {
       const objectPayload: DPOPayloadObject = {
@@ -139,7 +139,7 @@ export class DPOPayment {
    @throws {DPOError}
   */
   refundPayment(
-    refundPaymentObject: RefundPaymentObject
+    refundPaymentObject: RefundPaymentObject,
   ): Promise<DPOResponse> {
     try {
       const objectPayload: DPOPayloadObject = {
@@ -162,7 +162,7 @@ export class DPOPayment {
    @throws {DPOError}
   */
   cancelPayment(
-    cancelPaymentObject: CancelPaymentObject
+    cancelPaymentObject: CancelPaymentObject,
   ): Promise<DPOResponse> {
     try {
       const objectPayload: DPOPayloadObject = {
@@ -186,7 +186,7 @@ export class DPOPayment {
    @returns {Promise<DPOCheckPaymentStatusResponse>}
   */
   checkPaymentStatus(
-    checkPaymentStatusObject: CheckPaymentStatusObject
+    checkPaymentStatusObject: CheckPaymentStatusObject,
   ): Promise<DPOCheckPaymentStatusResponse> {
     try {
       const objectPayload: DPOPayloadObject = {
@@ -198,7 +198,7 @@ export class DPOPayment {
       };
 
       return this.processPaymentResponse(
-        objectPayload
+        objectPayload,
       ) as Promise<DPOCheckPaymentStatusResponse>;
     } catch (error: any) {
       return errorHandler(error);
