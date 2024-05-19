@@ -19,12 +19,11 @@ env:
   NPM_CONFIG_COLOR: always
 
 jobs:
-  # verify against ranges defined as supported in engines.node
   test_matrix:
     strategy:
       matrix:
         node-version:
-          - 20.8.1
+          - 22
           - 20
           - 21
           - 18
@@ -34,8 +33,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - run: git config --global user.name github-actions
-      - run: git config --global user.email github-actions@github.com
+      - run: git config --global user.name Patrick Kabwe
+      - run: git config --global user.email patrickkabwe@github.com
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:

@@ -27,6 +27,8 @@ jobs:
       - run: yarn audit:fix
       - run: yarn audit signatures
       - run: yarn build
+      - run: git config --global user.name Patrick Kabwe
+      - run: git config --global user.email patrickkabwe@github.com
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
