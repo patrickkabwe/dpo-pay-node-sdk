@@ -47,7 +47,6 @@ export class DPOPayment {
   /**
    @description This method initiates a payment request to the DPO API
    @param {InitiatePaymentPayload} paymentObject
-   @throws {DPOError}
    @returns {Promise<DPOInitiatePaymentResponse>}
   */
   async initiatePayment(

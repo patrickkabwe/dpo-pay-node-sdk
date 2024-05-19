@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { DPOError } from "~/helpers/error";
 import { MOBILE_NETWORK_OPERATOR } from "~/types";
 import { DPOPayment } from "../src/dpo";
 
@@ -286,17 +287,11 @@ describe("DPO Payment", () => {
       await dpoPayment.cancelPayment({
         transactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07EA5CA560",
       });
-    } catch (error: any) {
-      error.message = JSON.parse(error.message);
-      expect(error.message).toHaveProperty(
-        "statusCode",
-        expectedPaymentResponse.statusCode
-      );
-      expect(error.message).toHaveProperty(
-        "message",
-        expectedPaymentResponse.message
-      );
+    } catch (error) {
+      expect(error).toBeInstanceOf(DPOError);
       expect(error).toHaveProperty("code", expectedPaymentResponse.statusCode);
+      expect(error).toHaveProperty("message", expectedPaymentResponse.message);
+      expect(error).toHaveProperty("response", expectedPaymentResponse);
     }
   });
 });

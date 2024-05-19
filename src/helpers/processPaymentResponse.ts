@@ -17,7 +17,10 @@ export async function processPaymentResponse<T>(
   const fRes = xmlResponseFormatter(response.data);
 
   if (fRes.statusCode !== 200) {
-    throw new DPOError(JSON.stringify(fRes), fRes.statusCode);
+    throw new DPOError(fRes.message, fRes.statusCode, {
+      message: fRes.message,
+      statusCode: fRes.statusCode,
+    });
   }
   return fRes;
 }
