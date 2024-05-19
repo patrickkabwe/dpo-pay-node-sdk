@@ -19,8 +19,6 @@ permissions:
 jobs:
   publish:
     timeout-minutes: 5
-    concurrency: ${{ github.workflow }}-${{ github.event.number || github.ref }}
-
     name: Release
     runs-on: ubuntu-latest
     steps:
