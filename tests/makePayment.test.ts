@@ -57,7 +57,7 @@ describe("DPO Payment", () => {
         {
           serviceType: 5525,
           serviceDescription: "ServiceDescription",
-          serviceDate: "2021-01-01",
+          serviceDate: "2021-01-01"
         },
       ],
       transaction: {
