@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { MOBILE_NETWORK_OPERATOR } from "~/types";
 import { DPOPayment } from "../src/dpo";
 
 const mocks = vi.hoisted(() => ({
@@ -28,7 +29,7 @@ describe("DPO Payment", () => {
     const dpoPayment = new DPOPayment({
       companyToken: "72983CAC-5DB1-4C7F-BD88-352066B71592",
     });
-    const paymentExpected = {
+    const expectedPaymentResponse = {
       statusCode: 200,
       message: "Transaction created",
     };
@@ -51,21 +52,19 @@ describe("DPO Payment", () => {
     });
 
     const response = await dpoPayment.initiatePayment({
-      Services: [
+      services: [
         {
-          Service: {
-            ServiceType: 5525,
-            ServiceDescription: "ServiceDescription",
-            ServiceDate: "2021-01-01",
-          },
+          serviceType: 5525,
+          serviceDescription: "ServiceDescription",
+          serviceDate: "2021-01-01",
         },
       ],
-      Transaction: {
-        PaymentAmount: 100,
-        PaymentCurrency: "ZMW",
-        CompanyRef: "CompanyRef",
-        RedirectURL: "https://example.com",
-        BackURL: "https://example.com",
+      transaction: {
+        paymentAmount: 100,
+        paymentCurrency: "ZMW",
+        companyRef: "CompanyRef",
+        redirectURL: "https://example.com",
+        backURL: "https://example.com",
         customerAddress: "customerAddress",
         customerCity: "customerCity",
         customerCountry: "Zambia",
@@ -77,8 +76,11 @@ describe("DPO Payment", () => {
       },
     });
 
-    expect(response).toHaveProperty("statusCode", paymentExpected.statusCode);
-    expect(response).toHaveProperty("message", paymentExpected.message);
+    expect(response).toHaveProperty(
+      "statusCode",
+      expectedPaymentResponse.statusCode
+    );
+    expect(response).toHaveProperty("message", expectedPaymentResponse.message);
     expect(response.paymentURL).toBeDefined();
   });
 
@@ -86,7 +88,7 @@ describe("DPO Payment", () => {
     const dpoPayment = new DPOPayment({
       companyToken: "72983CAC-5DB1-4C7F-BD88-352066B71592",
     });
-    const paymentExpected = {
+    const expectedPaymentResponse = {
       statusCode: 200,
       message: "Transaction created",
     };
@@ -108,14 +110,57 @@ describe("DPO Payment", () => {
       data: xmlRes,
     });
 
-    const response = await dpoPayment.chargeMobilePayment({
-      MNO: "MTNZM",
-      MNOcountry: "zambia",
-      PhoneNumber: "260961234567",
-      TransactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07EA5CA560",
+    const response = await dpoPayment.processMobileMoneyPayment({
+      mno: MOBILE_NETWORK_OPERATOR.ZAMBIA_MTN,
+      mnoCountry: "zambia",
+      phoneNumber: "260961234567",
+      transactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07EA5CA560",
     });
 
-    expect(response).toHaveProperty("statusCode", paymentExpected.statusCode);
+    expect(response).toHaveProperty(
+      "statusCode",
+      expectedPaymentResponse.statusCode
+    );
+  });
+
+  it("should make a card payment", async () => {
+    const dpoPayment = new DPOPayment({
+      companyToken: "72983CAC-5DB1-4C7F-BD88-352066B71592",
+    });
+    const expectedPaymentResponse = {
+      statusCode: 200,
+      message: "Transaction created",
+    };
+
+    const xmlRes = `
+      <API3G>
+        <StatusCode>130</StatusCode>
+        <Result>000</Result>
+        <ResultExplanation>Transaction created</ResultExplanation>
+        <Transaction>
+        <TransactionID>123</TransactionID>
+        <TransactionDate>2021-01-01</TransactionDate>
+        <TransactionAmount>100</TransactionAmount>
+        </Transaction>
+      </API3G>
+    `;
+
+    mocks.post.mockResolvedValueOnce({
+      data: xmlRes,
+    });
+
+    const response = await dpoPayment.processCardPayment({
+      cardHolderName: "Patrick Kabwe",
+      creditCardCVV: "123",
+      creditCardExpiry: "01/23",
+      creditCardNumber: "123456789012",
+      transactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07EA5CA560",
+    });
+
+    expect(response).toHaveProperty(
+      "statusCode",
+      expectedPaymentResponse.statusCode
+    );
   });
 
   it("should be check payment status", async () => {
@@ -123,7 +168,7 @@ describe("DPO Payment", () => {
       companyToken: "72983CAC-5DB1-4C7F-BD88-352066B71592",
     });
 
-    const paymentExpected = {
+    const expectedPaymentResponse = {
       statusCode: 200,
       message: "Transaction not paid yet",
     };
@@ -140,11 +185,14 @@ describe("DPO Payment", () => {
     });
 
     const response = await dpoPayment.checkPaymentStatus({
-      TransactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07WA5CA560",
+      transactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07WA5CA560",
     });
 
-    expect(response).toHaveProperty("statusCode", paymentExpected.statusCode);
-    expect(response).toHaveProperty("message", paymentExpected.message);
+    expect(response).toHaveProperty(
+      "statusCode",
+      expectedPaymentResponse.statusCode
+    );
+    expect(response).toHaveProperty("message", expectedPaymentResponse.message);
   });
 
   it("should be cancel payment", async () => {
@@ -152,7 +200,7 @@ describe("DPO Payment", () => {
       companyToken: "72983CAC-5DB1-4C7F-BD88-352066B71592",
     });
 
-    const paymentExpected = {
+    const expectedPaymentResponse = {
       statusCode: 200,
       message: "Token been updated to status cancelled",
     };
@@ -169,11 +217,14 @@ describe("DPO Payment", () => {
     });
 
     const response = await dpoPayment.cancelPayment({
-      TransactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07EA5CA560",
+      transactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07EA5CA560",
     });
 
-    expect(response).toHaveProperty("statusCode", paymentExpected.statusCode);
-    expect(response).toHaveProperty("message", paymentExpected.message);
+    expect(response).toHaveProperty(
+      "statusCode",
+      expectedPaymentResponse.statusCode
+    );
+    expect(response).toHaveProperty("message", expectedPaymentResponse.message);
   });
 
   it("should be refund payment", async () => {
@@ -181,7 +232,7 @@ describe("DPO Payment", () => {
       companyToken: "72983CAC-5DB1-4C7F-BD88-352066B71592",
     });
 
-    const paymentExpected = {
+    const expectedPaymentResponse = {
       statusCode: 200,
       message: "Refund processed successfully",
     };
@@ -198,13 +249,16 @@ describe("DPO Payment", () => {
     });
 
     const response = await dpoPayment.refundPayment({
-      TransactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07EA5CA560",
+      transactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07EA5CA560",
       refundAmount: 100,
       refundDetails: "Refund details",
     });
 
-    expect(response).toHaveProperty("statusCode", paymentExpected.statusCode);
-    expect(response).toHaveProperty("message", paymentExpected.message);
+    expect(response).toHaveProperty(
+      "statusCode",
+      expectedPaymentResponse.statusCode
+    );
+    expect(response).toHaveProperty("message", expectedPaymentResponse.message);
   });
 
   it("should be throw an error", async () => {
@@ -212,7 +266,7 @@ describe("DPO Payment", () => {
       companyToken: "72983CAC-5DB1-4C7F-BD88-352066B71592",
     });
 
-    const paymentExpected = {
+    const expectedPaymentResponse = {
       statusCode: 400,
       message: "Invalid transaction token",
     };
@@ -230,16 +284,19 @@ describe("DPO Payment", () => {
 
     try {
       await dpoPayment.cancelPayment({
-        TransactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07EA5CA560",
+        transactionToken: "63B185BD-B8C0-4A9F-9F6E-AE07EA5CA560",
       });
     } catch (error: any) {
       error.message = JSON.parse(error.message);
       expect(error.message).toHaveProperty(
         "statusCode",
-        paymentExpected.statusCode
+        expectedPaymentResponse.statusCode
       );
-      expect(error.message).toHaveProperty("message", paymentExpected.message);
-      expect(error).toHaveProperty("code", paymentExpected.statusCode);
+      expect(error.message).toHaveProperty(
+        "message",
+        expectedPaymentResponse.message
+      );
+      expect(error).toHaveProperty("code", expectedPaymentResponse.statusCode);
     }
   });
 });

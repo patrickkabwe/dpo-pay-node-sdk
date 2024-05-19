@@ -4,24 +4,35 @@
   "main": "lib/index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf ./lib && tsup",
+    "build": "yarn clean && tsup",
     "test": "vitest",
+    "test:cov": "vitest --coverage",
+    "clean": "rm -rf ./lib",
     "audit:fix": "yarn-audit-fix --force"
   },
   "tsup": {
-    "entry": ["src/index.ts"],
-    "format": ["cjs", "esm"],
+    "entry": [
+      "src/index.ts"
+    ],
+    "format": [
+      "cjs",
+      "esm"
+    ],
     "outDir": "lib",
     "splitting": false,
     "sourcemap": false,
     "dts": true,
     "minify": true,
-    "clean": true
+    "clean": true,
+    "watch": true
   },
-  "files": ["lib"],
+  "files": [
+    "lib"
+  ],
   "devDependencies": {
     "@semantic-release/git": "^10.0.1",
     "@types/node": "^20.0.0",
+    "@vitest/coverage-v8": "^1.6.0",
     "tsup": "^8.0.0",
     "typescript": "^5.0.4",
     "vitest": "^1.2.2",
@@ -34,7 +45,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "keywords": ["dpo", "dpo-sdk", "dpo-sdk-node", "dpo-sdk-nodejs"],
+  "keywords": [
+    "dpo",
+    "dpo africa",
+    "dpo-sdk",
+    "dpo-sdk-node",
+    "dpo-sdk-nodejs"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/patrickkabwe/dpo-node-sdk"
@@ -54,7 +71,11 @@
       [
         "@semantic-release/git",
         {
-          "assets": ["package.json", "lib/*", "src/*"],
+          "assets": [
+            "package.json",
+            "lib/*",
+            "src/*"
+          ],
           "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
         }
       ],
