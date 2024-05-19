@@ -2,7 +2,7 @@
 
 ### Introduction
 
-The `@kazion/dpopay-sdk` is a npm package for node js which provides a convenient interface for interacting with the DPO API to process various payment operations. The package is designed to simplify the integration of DPO payment functionalities into your application.
+UnOfficial Node.js DPO SDK that provides a convenient interface for interacting with the DPO API to process various payment operations. The package is designed to simplify the integration of DPO payment functionalities into your application.
 
 ### Installation
 
@@ -34,9 +34,9 @@ The package provides the following payment operations:
 
 - `initiatePayment`: This method initiates a payment request to the DPO API.
 
-- `chargeMobilePayment`: This method initiates a mobile money payment request to the DPO API.
+- `processMobileMoneyPayment`: This method initiates a mobile money payment request to the DPO API.
 
-- `chargeCardPayment`: This method initiates a card payment request to the DPO API.
+- `processCardPayment`: This method initiates a card payment request to the DPO API.
 
 - `refundPayment`: This method initiates a payment refund request to the DPO API.
 
@@ -45,6 +45,7 @@ The package provides the following payment operations:
 - `checkPaymentStatus`: This method checks the status of a payment request to the DPO API.
 
 ### Examples
+For detailed examples, please refer to the [examples](examples) directory.
 
 #### Initiate Payment
 
@@ -57,12 +58,12 @@ const dpoPayment = new DPOPayment({
 });
 
 const initiatePaymentPayload: InitiatePaymentPayloadObject = {
-  Transaction: {
-    PaymentAmount: 100.0,
-    PaymentCurrency: "USD",
-    CompanyRef: "123456",
-    RedirectURL: "https://example.com/redirect",
-    BackURL: "https://example.com/back",
+  transaction: {
+    paymentAmount: 100.0,
+    paymentCurrency: "ZMW",
+    companyRef: "123456",
+    redirectURL: "https://6384-41-216-95-231.ngrok-free.app/webhook",
+    backURL: "https://6384-41-216-95-231.ngrok-free.app/back-url",
     customerFirstName: "John",
     customerLastName: "Doe",
     customerEmail: "john.doe@example.com",
@@ -71,21 +72,16 @@ const initiatePaymentPayload: InitiatePaymentPayloadObject = {
     customerCity: "Anytown",
     customerCountry: "US",
     customerZip: "12345",
-    EmailTransaction: 1,
+    emailTransaction: 1,
   },
-  Services: [
+  services: [
     {
-      Service: {
-        ServiceType: "123",
-        ServiceDescription: "Service Description",
-        ServiceDate: "2023-12-31",
-        ServiceFrom: "10:00 AM",
-        ServiceTo: "12:00 PM",
-      },
+      serviceType: "5525",
+      serviceDescription: "Service Description",
+      serviceDate: "2023-12-31",
     },
   ],
 };
-
 // Initialize DPOPayment object with your company token
 const dpoPayment = new DPOPayment({
   companyToken: "your_company_token",
@@ -113,10 +109,10 @@ import { DPOPayment } from "dpopayment";
 
 // Example payload for charging a mobile payment
 const chargeMobilePaymentPayload: ChargeMobilePaymentObject = {
-  TransactionToken: "your_transaction_token",
-  PhoneNumber: "1234567890",
-  MNO: "MTNZM", // Mobile Network Operator
-  MNOcountry: "zambia",
+  transactionToken: "your_transaction_token",
+  phoneNumber: "1234567890",
+  mno: "MTNZM", // Mobile Network Operator
+  mnoCountry: "zambia",
 };
 
 // Initialize DPOPayment object with your company token
