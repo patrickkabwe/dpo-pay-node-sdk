@@ -1,12 +1,109 @@
 export interface DPOPaymentOptions {
+  /**
+   * @description The company token provided by DPO
+   */
   companyToken: string;
+  /**
+    @description The API version to be used for the DPO API. Default is `v6`. 
+    @usage `Note: currently only v6 is supported` 
+    ```ts
+    const dpo = new DPOPayment({
+      companyToken: "your-company",
+      apiVersion: "v6"
+    });
+    ```
+  */
   apiVersion?: APIVersion;
 }
 
-export type Country = "ZM" | "KE" | "UG" | "TZ";
+export type CountryCode =
+  | "ZM"
+  | "KE"
+  | "UG"
+  | "TZ"
+  | "ZW"
+  | "MW"
+  | "MU"
+  | "NA"
+  | "NG"
+  | "RW"
+  | "AE"
+  | "ZA";
+export type CountryName =
+  | "botswana"
+  | "uganda"
+  | "tanzania"
+  | "zambia"
+  | "zanzibar"
+  | "ghana"
+  | "kenya"
+  | "zimbabwe"
+  | "malawi"
+  | "mauritius"
+  | "namibia"
+  | "nigeria"
+  | "rwanda"
+  | "united arab emirates"
+  | "south africa"
+  | "ivory coast";
 export type Currency = "USD" | "ZMW" | "KES" | "UGX" | "TZS";
+export enum MOBILE_NETWORK_OPERATOR {
+  ZAMBIA_MTN = "MTNZM",
+  ZAMBIA_AIRTEL = "AirtelZM",
+  RWANDA_MTN = "MTN",
+  RWANDA_AIRTEL = "AirtelRW",
+  MALAWI_AIRTEL = "AirtelMW",
+  UGANDA_MTN = "MTNmobilemoney",
+  UGANDA_AIRTEL = "Mobile_Airtel_UG",
+  TANZANIA_SELCOM_ZANTEL = "Selcom_webPay_Zantel",
+  TANZANIA_SELCOM_HALOTEL = "Selcom_webPay_Halotel",
+  TANZANIA_TIGO = "TIGOdebitMandate",
+  TANZANIA_SELCOM = "Selcom_webPay",
+  TANZANIA_SELCOM_TTCL = "Selcom_webPay_TTCL",
+  TANZANIA_AIRTEL = "AirtelTZ",
+  GHANA_VODA = "VodaGH",
+  GHANA_MTN = "MTN",
+  KENYA_SAFARICOM = "SafaricomSTKv2",
+  KENYA_AIRTEL = "AirtelKE",
+  ZIMBABWE_ECOCASH = "EcoCash",
+}
 
 export interface Transaction {
+  paymentAmount: number;
+  paymentCurrency: Currency;
+  companyRef: string;
+  redirectURL: string;
+  backURL: string;
+  companyRefUnique?: string;
+  /**
+   * @description The Payment Time Limit for the transaction
+   * @default 96 hours
+   * @type {number}
+   */
+  ptl?: number; // default is 96 hours
+  ptlType?: "hours" | "minutes";
+  allowRecurrent?: 0 | 1; // 0 = false, 1 = true
+  /**
+   * transactionChargeType: `1 = Charge, 2 = Authorize Manual, 3 = Authorize Auto`
+   */
+  transactionChargeType?: 1 | 2 | 3;
+  /**
+   * @description The default payment country for the transaction @type {CountryName}
+   * @default "zambia"
+   */
+  defaultPaymentCountry?: CountryName;
+  customerFirstName?: string;
+  customerLastName?: string;
+  customerEmail?: string;
+  customerPhone?: string;
+  customerAddress?: string;
+  customerCity?: string;
+  customerCountry?: string;
+  customerZip?: string;
+  emailTransaction?: 0 | 1; // 0 = false, 1 = true
+}
+
+export interface TransactionInternal {
   PaymentAmount: number;
   PaymentCurrency: Currency;
   CompanyRef: string;
@@ -17,7 +114,7 @@ export interface Transaction {
   PTLtype?: "hours" | "minutes";
   AllowRecurrent?: 0 | 1; // 0 = false, 1 = true
   TransactionChargeType?: 1 | 2 | 3; // 1 = Charge, 2 = Authorize Manual, 3 = Authorize Auto
-  DefaultPaymentCountry?: Country;
+  DefaultPaymentCountry?: CountryName;
   customerFirstName?: string;
   customerLastName?: string;
   customerEmail?: string;
@@ -30,6 +127,13 @@ export interface Transaction {
 }
 
 export interface Service {
+  serviceType: string | number;
+  serviceDescription: string;
+  serviceDate: string;
+  serviceFrom?: string;
+  serviceTo?: string;
+}
+export interface ServiceInternal {
   Service: {
     ServiceType: string | number;
     ServiceDescription: string;
@@ -43,24 +147,55 @@ export interface Additional {
   [key: string]: any;
 }
 
-export interface InitiatePaymentPayloadObject {
-  Transaction: Transaction;
-  Services: Service[];
+export interface InitiatePaymentPayload {
+  transaction: Transaction;
+  services: Service[];
+  additional?: Additional;
+}
+
+export interface InitiatePaymentPayloadInternal {
+  Transaction: TransactionInternal;
+  Services: ServiceInternal[];
   Additional?: Additional;
 }
 
-export interface ChargeMobilePaymentObject {
-  TransactionToken: string;
-  PhoneNumber: string;
-  MNO: "MTNZM" | "AirtelZM";
-  MNOcountry: Country;
+export interface ChargeMobilePayment {
+  /**
+   * The transaction token for the transaction
+   */
+  transactionToken: string;
+  /**
+   * The mobile number to charge
+   */
+  phoneNumber: string;
+  /**
+   * The Mobile Network Operator (MNO) for the transaction
+   * @type {MOBILE_NETWORK_OPERATOR}
+   */
+  mno: MOBILE_NETWORK_OPERATOR;
+  /**
+   * The default payment country for the transaction
+   * @default "zambia"
+   */
+  mnoCountry: CountryName;
 }
 
-export interface CheckPaymentStatusObject {
-  TransactionToken: string;
+export interface CheckPaymentStatus {
+  transactionToken: string;
 }
 
-export interface ChargeCreditCardPaymentObject {
+export interface CheckPaymentStatusInternal {
+  TransactionToken: string;
+}
+export interface ChargeCreditCardPayment {
+  transactionToken: string;
+  creditCardNumber: string;
+  creditCardExpiry: string;
+  creditCardCVV: string;
+  cardHolderName: string;
+  chargeType?: string;
+}
+export interface ChargeCreditCardPaymentInternal {
   TransactionToken: string;
   CreditCardNumber: string;
   CreditCardExpiry: string;
@@ -69,11 +204,21 @@ export interface ChargeCreditCardPaymentObject {
   ChargeType?: string;
 }
 
-export interface CancelPaymentObject {
+export interface CancelPayment {
+  transactionToken: string;
+}
+
+export interface CancelPaymentInternal {
   TransactionToken: string;
 }
 
-export interface RefundPaymentObject {
+export interface RefundPayment {
+  transactionToken: string;
+  refundAmount: number;
+  refundDetails: string;
+}
+
+export interface RefundPaymentInternal {
   TransactionToken: string;
   refundAmount: number;
   refundDetails: string;
@@ -105,8 +250,6 @@ export type DPOResponse = {
 export interface DPOInitiatePaymentResponse extends DPOResponse {
   transToken: string;
   transRef: string;
-  statusCode: StatusCodeResponse;
-  message: string;
   paymentURL: string;
 }
 
@@ -149,20 +292,32 @@ export interface WebhookResponse {
   dpoXMLResponse: string;
 }
 
-export type DPOPayloadObject = {
+export type DPOPayload<T> = {
   API3G: {
     CompanyToken: string;
-    Request: DPORequestType;
-    [key: string]: any;
-  };
+    Request: DPO_REQUEST_TYPE;
+  } & T;
 };
 
-export type DPORequestType =
-  | "createToken"
-  | "refundToken"
-  | "updateToken"
-  | "verifyToken"
-  | "cancelToken"
-  | "chargeTokenBankTransfer"
-  | "chargeTokenCreditCard"
-  | "chargeTokenMobile";
+export enum DPO_REQUEST_TYPE {
+  CREATE_TOKEN = "createToken",
+  REFUND_TOKEN = "refundToken",
+  UPDATE_TOKEN = "updateToken",
+  VERIFY_TOKEN = "verifyToken",
+  CANCEL_TOKEN = "cancelToken",
+  CHARGE_TOKEN_BANK_TRANSFER = "chargeTokenBankTransfer",
+  CHARGE_TOKEN_CREDIT_CARD = "chargeTokenCreditCard",
+  CHARGE_TOKEN_MOBILE = "chargeTokenMobile",
+}
+
+export enum PAYMENT_STRATEGY_TYPE {
+  MOBILE_MONEY = "mobileMoney",
+  CARD = "card",
+}
+
+export interface ChargeMobilePaymentInternal {
+  TransactionToken: string;
+  PhoneNumber: string;
+  MNO: MOBILE_NETWORK_OPERATOR;
+  MNOcountry: CountryName;
+}

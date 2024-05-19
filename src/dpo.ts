@@ -1,24 +1,34 @@
-import { axiosInstance } from "./config/axios";
-import { DPOError } from "./helpers/error";
 import { errorHandler } from "./helpers/errorHandler";
-import { jsonToXml } from "./helpers/jsonToXml";
 import {
-  webhookResponse,
-  xmlResponseFormatter,
-} from "./helpers/xmlResponseFormatter";
-import type {
+  cancelPaymentInternalMapper,
+  chargeCreditCardPaymentMapper,
+  chargeMobilePaymentMapper,
+  checkPaymentStatusInternalMapper,
+  initiatePaymentMapper,
+  refundPaymentMapper,
+} from "./helpers/mappers";
+import { processPaymentResponse } from "./helpers/processPaymentResponse";
+import { webhookResponse } from "./helpers/xmlResponseFormatter";
+import {
   APIVersion,
-  CancelPaymentObject,
-  ChargeCreditCardPaymentObject,
-  ChargeMobilePaymentObject,
-  CheckPaymentStatusObject,
+  CancelPayment,
+  CancelPaymentInternal,
+  ChargeCreditCardPayment,
+  ChargeCreditCardPaymentInternal,
+  ChargeMobilePayment,
+  ChargeMobilePaymentInternal,
+  CheckPaymentStatus,
+  CheckPaymentStatusInternal,
+  DPO_REQUEST_TYPE,
   DPOCheckPaymentStatusResponse,
   DPOInitiatePaymentResponse,
-  DPOPayloadObject,
+  DPOPayload,
   DPOPaymentOptions,
   DPOResponse,
-  InitiatePaymentPayloadObject,
-  RefundPaymentObject,
+  InitiatePaymentPayload,
+  InitiatePaymentPayloadInternal,
+  RefundPayment,
+  RefundPaymentInternal,
   WebhookResponse,
 } from "./types";
 
@@ -35,46 +45,26 @@ export class DPOPayment {
   }
 
   /**
-  This method processes a payment request to the DPO API
-  */
-  async processPaymentResponse(objectPayload: DPOPayloadObject) {
-    const xmlPayload = jsonToXml(objectPayload);
-
-    const response = await axiosInstance.post(
-      `/${this.apiVersion}/`,
-      xmlPayload,
-    );
-
-    delete response.data["?xml"];
-
-    const fRes = xmlResponseFormatter(response.data);
-
-    if (fRes.statusCode !== 200) {
-      throw new DPOError(JSON.stringify(fRes), fRes.statusCode);
-    }
-    return fRes;
-  }
-
-  /**
    @description This method initiates a payment request to the DPO API
-   @param {InitiatePaymentPayloadObject} paymentObject
+   @param {InitiatePaymentPayload} paymentObject
    @throws {DPOError}
    @returns {Promise<DPOInitiatePaymentResponse>}
   */
   async initiatePayment(
-    initiatePaymentObject: InitiatePaymentPayloadObject,
+    initiatePaymentObject: InitiatePaymentPayload
   ): Promise<DPOInitiatePaymentResponse> {
     try {
-      const objectPayload: DPOPayloadObject = {
+      const objectPayload: DPOPayload<InitiatePaymentPayloadInternal> = {
         API3G: {
           CompanyToken: this.companyToken,
-          Request: "createToken",
-          ...initiatePaymentObject,
+          Request: DPO_REQUEST_TYPE.CREATE_TOKEN,
+          ...initiatePaymentMapper(initiatePaymentObject),
         },
       };
 
-      const response = (await this.processPaymentResponse(
+      const response = (await processPaymentResponse(
         objectPayload,
+        this.apiVersion
       )) as DPOInitiatePaymentResponse;
 
       return {
@@ -87,47 +77,42 @@ export class DPOPayment {
   }
 
   /**
-   @description This method charges a mobile payment request to the DPO API
-   @param {ChargeMobilePaymentObject} chargeMobilePaymentObject
-   @returns {Promise<DPOResponse>}
-   @throws {DPOError}
-  */
-  chargeMobilePayment(
-    chargeMobilePaymentObject: ChargeMobilePaymentObject,
-  ): Promise<DPOResponse> {
+   * @description This method initiates a mobile money payment request to the DPO API
+   * @param objectPayload
+   * @returns {Promise<DPOResponse>}
+   */
+  async processMobileMoneyPayment(paymentObject: ChargeMobilePayment) {
     try {
-      const objectPayload: DPOPayloadObject = {
+      const objectPayload: DPOPayload<ChargeMobilePaymentInternal> = {
         API3G: {
           CompanyToken: this.companyToken,
-          Request: "chargeTokenMobile",
-          ...chargeMobilePaymentObject,
+          Request: DPO_REQUEST_TYPE.CHARGE_TOKEN_MOBILE,
+          ...chargeMobilePaymentMapper(paymentObject),
         },
       };
 
-      return this.processPaymentResponse(objectPayload);
+      return processPaymentResponse(objectPayload, this.apiVersion);
     } catch (error: any) {
       return errorHandler(error);
     }
   }
 
   /**
-   @description This method charges a credit card payment request to the DPO API
-   @param {ChargeCreditCardPaymentObject} chargeCreditCardPaymentObject
-   @throws {DPOError}
-  */
-  chargeCardPayment(
-    chargeCreditCardPaymentObject: ChargeCreditCardPaymentObject,
-  ): Promise<DPOResponse> {
+   * @description This method initiates a card payment request to the DPO API
+   * @param objectPayload
+   * @returns {Promise<DPOResponse>}
+   */
+  async processCardPayment(paymentObject: ChargeCreditCardPayment) {
     try {
-      const objectPayload: DPOPayloadObject = {
+      const objectPayload: DPOPayload<ChargeCreditCardPaymentInternal> = {
         API3G: {
           CompanyToken: this.companyToken,
-          Request: "chargeTokenCreditCard",
-          ...chargeCreditCardPaymentObject,
+          Request: DPO_REQUEST_TYPE.CHARGE_TOKEN_CREDIT_CARD,
+          ...chargeCreditCardPaymentMapper(paymentObject),
         },
       };
 
-      return this.processPaymentResponse(objectPayload);
+      return processPaymentResponse(objectPayload, this.apiVersion);
     } catch (error: any) {
       return errorHandler(error);
     }
@@ -135,22 +120,20 @@ export class DPOPayment {
 
   /**
    @description This method refunds a payment request to the DPO API
-   @param {RefundPaymentObject} refundPaymentObject
+   @param {RefundPayment} refundPaymentObject
    @throws {DPOError}
   */
-  refundPayment(
-    refundPaymentObject: RefundPaymentObject,
-  ): Promise<DPOResponse> {
+  refundPayment(refundPaymentObject: RefundPayment): Promise<DPOResponse> {
     try {
-      const objectPayload: DPOPayloadObject = {
+      const objectPayload: DPOPayload<RefundPaymentInternal> = {
         API3G: {
           CompanyToken: this.companyToken,
-          Request: "refundToken",
-          ...refundPaymentObject,
+          Request: DPO_REQUEST_TYPE.REFUND_TOKEN,
+          ...refundPaymentMapper(refundPaymentObject),
         },
       };
 
-      return this.processPaymentResponse(objectPayload);
+      return processPaymentResponse(objectPayload, this.apiVersion);
     } catch (error: any) {
       return errorHandler(error);
     }
@@ -158,22 +141,20 @@ export class DPOPayment {
 
   /**
    @description This method cancels a payment request to the DPO API
-   @param {CancelPaymentObject} cancelPaymentObject
+   @param {CancelPayment} cancelPaymentObject
    @throws {DPOError}
   */
-  cancelPayment(
-    cancelPaymentObject: CancelPaymentObject,
-  ): Promise<DPOResponse> {
+  cancelPayment(cancelPaymentObject: CancelPayment): Promise<DPOResponse> {
     try {
-      const objectPayload: DPOPayloadObject = {
+      const objectPayload: DPOPayload<CancelPaymentInternal> = {
         API3G: {
           CompanyToken: this.companyToken,
-          Request: "cancelToken",
-          ...cancelPaymentObject,
+          Request: DPO_REQUEST_TYPE.CANCEL_TOKEN,
+          ...cancelPaymentInternalMapper(cancelPaymentObject),
         },
       };
 
-      return this.processPaymentResponse(objectPayload);
+      return processPaymentResponse(objectPayload, this.apiVersion);
     } catch (error: any) {
       return errorHandler(error);
     }
@@ -181,24 +162,25 @@ export class DPOPayment {
 
   /**
    @description This method checks the status of a payment request to the DPO API
-   @param {CheckPaymentStatusObject} checkPaymentStatusObject
+   @param {CheckPaymentStatus} checkPaymentStatusObject
    @throws {DPOError}
    @returns {Promise<DPOCheckPaymentStatusResponse>}
   */
   checkPaymentStatus(
-    checkPaymentStatusObject: CheckPaymentStatusObject,
+    checkPaymentStatusObject: CheckPaymentStatus
   ): Promise<DPOCheckPaymentStatusResponse> {
     try {
-      const objectPayload: DPOPayloadObject = {
+      const objectPayload: DPOPayload<CheckPaymentStatusInternal> = {
         API3G: {
           CompanyToken: this.companyToken,
-          Request: "verifyToken",
-          ...checkPaymentStatusObject,
+          Request: DPO_REQUEST_TYPE.VERIFY_TOKEN,
+          ...checkPaymentStatusInternalMapper(checkPaymentStatusObject),
         },
       };
 
-      return this.processPaymentResponse(
+      return processPaymentResponse(
         objectPayload,
+        this.apiVersion
       ) as Promise<DPOCheckPaymentStatusResponse>;
     } catch (error: any) {
       return errorHandler(error);
