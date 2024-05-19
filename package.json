@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn clean && tsup",
+    "build:watch": "yarn clean && tsup --watch",
     "test": "vitest",
     "test:cov": "vitest --coverage",
     "clean": "rm -rf ./lib",
@@ -23,8 +24,7 @@
     "sourcemap": false,
     "dts": true,
     "minify": true,
-    "clean": true,
-    "watch": true
+    "clean": true
   },
   "files": [
     "lib"
