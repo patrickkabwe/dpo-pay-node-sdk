@@ -7,7 +7,7 @@ on:
       - main
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -19,7 +19,8 @@ permissions:
 jobs:
   publish:
     timeout-minutes: 5
-    concurrency: ${{ github.workflow }}-${{ github.ref }}
+    concurrency: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+
     name: Release
     runs-on: ubuntu-latest
     steps:
