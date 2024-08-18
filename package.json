@@ -54,7 +54,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/patrickkabwe/dpo-node-sdk"
+    "url": "https://github.com/patrickkabwe/dpo-pay-node-sdk"
   },
   "release": {
     "branches": [
