@@ -568,11 +568,11 @@
   integrity sha512-sviUmCE8AYdaF/KIHLDJBQgeYzPBI0vf/17NaYehBJfYD1j6/L95Slh07NlyK2iNyBNaEkb3En2jRt+a8y3xZQ==
 
 "@types/node@*":
-  version "22.7.7"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.7.7.tgz#6cd9541c3dccb4f7e8b141b491443f4a1570e307"
-  integrity sha512-SRxCrrg9CL/y54aiMCG3edPKdprgMVGDXjA3gB8UmmBW5TcXzRUYAh8EWzTnSJFAd1rgImPELza+A3bJ+qxz8Q==
+  version "22.8.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.8.1.tgz#b39d4b98165e2ae792ce213f610c7c6108ccfa16"
+  integrity sha512-k6Gi8Yyo8EtrNtkHXutUu2corfDf9su95VYVP10aGYMMROM6SAItZi0w1XszA6RtWTHSVp5OeFof37w0IEqCQg==
   dependencies:
-    undici-types "~6.19.2"
+    undici-types "~6.19.8"
 
 "@types/node@^20.0.0":
   version "20.16.13"
@@ -867,7 +867,7 @@ combined-stream@^1.0.8:
   dependencies:
     delayed-stream "~1.0.0"
 
-commander@^12.0.0:
+commander@^12.1.0:
   version "12.1.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-12.1.0.tgz#01423b36f501259fdaac4d0e4d60c96c991585d3"
   integrity sha512-Vw8qHK3bZM9y/P10u3Vib8o/DdkvA2OtPtZvD871QKjy74Wj1WSKFILMPRPSdUSx5RFK1arlJzEtA4PkFgnbuA==
@@ -1916,7 +1916,7 @@ typescript@^5.0.4:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.6.3.tgz#5f3449e31c9d94febb17de03cc081dd56d81db5b"
   integrity sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==
 
-undici-types@~6.19.2:
+undici-types@~6.19.2, undici-types@~6.19.8:
   version "6.19.8"
   resolved "https://registry.yarnpkg.com/undici-types/-/undici-types-6.19.8.tgz#35111c9d1437ab83a7cdc0abae2f26d88eda0a02"
   integrity sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==
@@ -2032,9 +2032,9 @@ yallist@^2.1.2:
   integrity sha512-ncTzHV7NvsQZkYe1DW7cbDLm0YpzHmZF5r/iyP3ZnQtMiJ+pjzisCiMNI+Sj+xQF5pXhSHxSB3uDbsBTzY/c2A==
 
 yarn-audit-fix@^10.0.7:
-  version "10.0.9"
-  resolved "https://registry.yarnpkg.com/yarn-audit-fix/-/yarn-audit-fix-10.0.9.tgz#9f64a7a479f1f88736fc50fb3cfcb23efc2145b2"
-  integrity sha512-YuvTKsgLwZOgBrhAVCG1mzgdkvlLmgncEI1cDWqwCbF1cQ+20YckzwlQpUh/aUwsuqQTvyeYyRiLtiizDk1I2A==
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/yarn-audit-fix/-/yarn-audit-fix-10.1.0.tgz#7883639e74e30abc375f68e6dbb48e9af73e437f"
+  integrity sha512-d5Glaqa1PYlzkXgtwznvLf9zjB9WSZkkWDbjdKauSgVWS5PmtHgtJ4xvBSvSRRJb68ksGccjlxFrA0zK0vhp2w==
   dependencies:
     "@types/fs-extra" "^11.0.4"
     "@types/lodash-es" "^4.17.12"
@@ -2042,7 +2042,7 @@ yarn-audit-fix@^10.0.7:
     "@types/yarnpkg__lockfile" "^1.1.9"
     "@yarnpkg/lockfile" "^1.1.0"
     chalk "^5.3.0"
-    commander "^12.0.0"
+    commander "^12.1.0"
     fast-glob "^3.3.2"
     fs-extra "^11.2.0"
     js-yaml "^4.1.0"
