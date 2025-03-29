@@ -25,7 +25,6 @@ jobs:
         node-version:
           - 22
           - 20
-          - 21
           - 18
 
     runs-on: ubuntu-latest
