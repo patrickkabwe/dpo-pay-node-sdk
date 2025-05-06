@@ -499,9 +499,9 @@
     undici-types "~6.20.0"
 
 "@types/node@^22.13.14":
-  version "22.15.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.15.6.tgz#30de231bec3efa73fe5c9b26b0784b53fdf7201f"
-  integrity sha512-jIdRQl0HWC2HNjV2HmX3Oq76keYInKHWQssGAZz++a9Tu7zGswzyhOFy3NNWI9pZPzCcUritUnkjBWSYA7lI4g==
+  version "22.15.13"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.15.13.tgz#24e87acca89afcb44bb9ff25666baa98dee9480f"
+  integrity sha512-mkmz+UBGCF/ssSObTp1McwQEvIjO2hUnVvZzck61l0su7btUill8OSvzA4N62+AtkJgMhiniyD+wEL5kocZaEA==
   dependencies:
     undici-types "~6.21.0"
 
