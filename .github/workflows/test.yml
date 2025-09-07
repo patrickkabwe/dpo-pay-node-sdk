@@ -35,7 +35,7 @@ jobs:
       - run: git config --global user.name Patrick Kabwe
       - run: git config --global user.email patrickkabwe@github.com
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ matrix.node-version }}
       - run: yarn install
